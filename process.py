@@ -5,18 +5,19 @@ patterns. Also add cosmetic blank lines between bib entries.
 from __future__ import print_function
 
 
-fn = "biblio.bib" #the name of the bib file to process
-fields_to_remove = ["file =", "abstract =", "file =", "abstrac ="] #non case sensitive
+fn_source = "biblio.bib" #the name of the bib file to process
+fn_target = "cleanedBiblio.bib" #the name of the bib file to produce
+fields_to_remove = ["file =", "abstract =", "file =", "abstract="] #non case sensitive
 add_blank_line = True #add blank line between unspaced bibliogrphy entries
 
-f = open(fn, "r")
+f = open(fn_source, "r")
 lines = f.readlines()
 f.close()
 
 
 removing = False
 count = 0
-f = open(fn+"lol","w")
+f = open(fn_target,"w")
 for i,line in enumerate(lines):
     low = line.lower().replace("\n","")
     for pattern in fields_to_remove:
@@ -35,7 +36,7 @@ for i,line in enumerate(lines):
         removing = False
 f.close()
 
-print("Finished to process",fn,"\nRemoved",count,"lines.")
+print("Finished to process",fn_source,"to",fn_target,"\nRemoved",count,"lines.")
 
 
 
