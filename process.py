@@ -5,7 +5,7 @@ patterns. Also add cosmetic blank lines between bib entries.
 from __future__ import print_function
 
 
-fn_source = "biblio.bib" #the name of the bib file to process
+fn_source = "test.bib" #the name of the bib file to process
 fn_target = "cleanedBiblio.bib" #the name of the bib file to produce
 fields_to_remove = ["file =", "abstract =", "file =", "abstract="] #non case sensitive
 add_blank_line = True #add blank line between unspaced bibliogrphy entries
@@ -16,6 +16,7 @@ f.close()
 
 
 removing = False
+ending = ""
 count = 0
 f = open(fn_target,"w")
 for i,line in enumerate(lines):
@@ -32,7 +33,7 @@ for i,line in enumerate(lines):
                 print("--> Added blank line before", line)
                 f.write("\n")
         f.write(line)
-    if "}," in line:
+    if ",\n" in line:
         removing = False
 f.close()
 
