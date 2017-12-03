@@ -33,8 +33,13 @@ for i,line in enumerate(lines):
                 print("--> Added blank line before", line)
                 f.write("\n")
         f.write(line)
-    if ",\n" in line:
-        removing = False
+    else:
+        if ",\n" in line or "}\n" in line:
+            if "}\n" in line:
+                print(line)
+                assert "}\n" == line
+                f.write("}\n")
+            removing = False
 f.close()
 
 print("Finished to process",fn_source,"to",fn_target,"\nRemoved",count,"lines.")
