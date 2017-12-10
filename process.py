@@ -5,9 +5,10 @@ patterns. Also add cosmetic blank lines between bib entries.
 from __future__ import print_function
 
 
-fn_source = "test.bib" #the name of the bib file to process
+fn_source = "biblio.bib" #the name of the bib file to process
 fn_target = "cleanedBiblio.bib" #the name of the bib file to produce
 fields_to_remove = ["file =", "abstract =", "file =", "abstract="] #non case sensitive
+integrity_verification = ["author", "title"] #fields that must contain each entry
 add_blank_line = True #add blank line between unspaced bibliogrphy entries
 
 f = open(fn_source, "r")
@@ -15,6 +16,7 @@ lines = f.readlines()
 f.close()
 
 
+entries = set()
 removing = False
 ending = ""
 count = 0
@@ -45,6 +47,34 @@ f.close()
 print("Finished to process",fn_source,"to",fn_target,"\nRemoved",count,"lines.")
 
 
+
+#verify integrity
+f = open(fn_target, "r")
+lines = f.readlines()
+f.close()
+
+content = {}
+current = None
+for line in lines:
+    while "\t" in line:
+        line = line.replace("\t","    ")
+    if "@" in line:
+        current = line.split("{")[1].split(",")[0]
+        if not current:
+            raise Exception("Invalid entry")
+        content[current] = {}
+    if "=" in line:
+        field = line.split("=")[0].replace(" ","").lower()
+        content[current][field] = line.split("=")[1].replace("\n","")
+
+count = 0
+for article in content:
+    for field in integrity_verification:
+        if not field in content[article]:
+            print("No", field, "in", article, "!!!")
+            count += 1
+
+print(count,"integrity warnings found in the produced file.")
 
 
 
