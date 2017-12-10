@@ -7,9 +7,20 @@ from __future__ import print_function
 
 fn_source = "biblio.bib" #the name of the bib file to process
 fn_target = "cleanedBiblio.bib" #the name of the bib file to produce
-fields_to_remove = ["file =", "abstract =", "file =", "abstract="] #non case sensitive
-integrity_verification = ["author", "title"] #fields that must contain each entry
+fields_to_remove = ["file", "abstract"] #non case sensitive
+integrity_check = ["author", "title"] #fields that must contain each entry
 add_blank_line = True #add blank line between unspaced bibliogrphy entries
+auto_pattern = True #False : remove only the exact patterns in fields_to_remove
+
+
+if auto_pattern:
+    patterns = []
+    for equal in [" =", "="]:
+        for field in fields_to_remove:
+            patterns.append(field+equal)
+else:
+    patterns = fields_to_remove
+
 
 f = open(fn_source, "r")
 lines = f.readlines()
@@ -23,7 +34,7 @@ count = 0
 f = open(fn_target,"w")
 for i,line in enumerate(lines):
     low = line.lower().replace("\n","")
-    for pattern in fields_to_remove:
+    for pattern in patterns:
         if pattern in low:
             print("--> Removing field from", line)
             removing = True
@@ -69,7 +80,7 @@ for line in lines:
 
 count = 0
 for article in content:
-    for field in integrity_verification:
+    for field in integrity_check:
         if not field in content[article]:
             print("No", field, "in", article, "!!!")
             count += 1
