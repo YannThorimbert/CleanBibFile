@@ -47,7 +47,8 @@ for i,line in enumerate(lines):
                 f.write("\n")
         f.write(line)
     else:
-        if ",\n" in line or "}\n" in line:
+##        if ",\n" in line or "}\n" in line:
+        if '",\n' in line or "},\n" in line or "}\n" in line:
             if "}\n" in line:
                 print(line)
                 assert "}\n" == line
